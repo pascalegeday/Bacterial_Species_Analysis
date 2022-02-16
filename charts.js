@@ -156,7 +156,7 @@ function buildCharts(sample) {
     var trace2 = 	{
       domain: { x: [0, 1], y: [0, 1] },
       value: washingFreq,
-      title: { text: "<b>Belly Button(Navel) Washing Frequency </b><br> Srubs per Week" },
+      title: { text: "<b>Belly Button(Navel) Washing Frequency </b><br> Scrubs per Week" },
       type: "indicator",
       mode: "gauge+number",
       gauge: {

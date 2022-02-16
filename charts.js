@@ -4,6 +4,7 @@ function init() {
 
   // Use the list of sample names to populate the select options
   d3.json("samples.json").then((data) => {
+    console.log(data);
     var sampleNames = data.names;
 
     sampleNames.forEach((sample) => {
@@ -65,7 +66,6 @@ function buildCharts(sample) {
 
     //  5. Create a variable that holds the first sample in the array.
     var firstSample = samplesResult[0];
-    console.log(firstSample)
 
 
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
@@ -86,14 +86,15 @@ function buildCharts(sample) {
       y: yticks,
       text: otuLabels,
       type: "bar",
-      orientation: "h"
+      orientation: "h",
+      marker: {color: "green"}
       };
 
   //   // 8. Create the trace for the bar chart. 
   var barData = [trace];
   //   // 9. Create the layout for the bar chart. 
     var barLayout = {
-      title: "Top 10 Bacteria Cultures Found"
+      title: "<b>Top 10 Bacteria Cultures Found</b>"
      
    };
   //   // 10. Use Plotly to plot the data with the layout. 
@@ -120,7 +121,7 @@ function buildCharts(sample) {
 
 //     // 2. Create the layout for the bubble chart.
     var bubbleLayout = {
-      title: "Bacteria Cultures Per Sample",
+      title: "<b>Bacteria Cultures Per Sample</b>",
       xaxis: {title: "OTU ID"},
       margin: {
         autoexpand: true,
@@ -137,46 +138,45 @@ function buildCharts(sample) {
 //     // 3. Use Plotly to plot the data with the layout.
     Plotly.newPlot("bubble", bubbleData, bubbleLayout); 
 
-// -------------------------------------------------------------
+// ---------------------------------------------------------------
 
- // Create a variable that holds the samples array. 
-
-    // Create a variable that filters the samples for the object with the desired sample number.
-
+    // Create a variable that holds the samples array. 
+    var metadata = data.metadata; 
     // 1. Create a variable that filters the metadata array for the object with the desired sample number.
-
-    // Create a variable that holds the first sample in the array.
-  
+    var metadataResult = metadata.filter(metadataObj => metadataObj.id == sample);
 
     // 2. Create a variable that holds the first sample in the metadata array.
+    var firstMDResult = metadataResult[0]
+
+
+  //   // 3. Create a variable that holds the washing frequency.
+    var washingFreq = firstMDResult.wfreq
     
-
-    // Create variables that hold the otu_ids, otu_labels, and sample_values.
-
-
-    // 3. Create a variable that holds the washing frequency.
-   
-    // Create the yticks for the bar chart.
-
-    // Use Plotly to plot the bar data and layout.
-    Plotly.newPlot();
+  //   // 4. Create the trace for the gauge chart.
+    var trace2 = 	{
+      domain: { x: [0, 1], y: [0, 1] },
+      value: washingFreq,
+      title: { text: "<b>Belly Button(Navel) Washing Frequency </b><br> Srubs per Week" },
+      type: "indicator",
+      mode: "gauge+number",
+      gauge: {
+        axis: {range: [0,10], dtick: 2},
+        bar: {color: "black"},
+        steps: [
+          {range: [0,2], color: "red"},
+          {range: [2,4], color: "orange"},
+          {range: [4,6], color: "yellow"},
+          {range: [6,8], color: "yellowgreen"},
+          {range: [8,10], color: "green"}
+        ]}
+    }
+     var gaugeData = [trace2];
     
-    // Use Plotly to plot the bubble data and layout.
-    Plotly.newPlot();
-   
-    
-    // 4. Create the trace for the gauge chart.
-    var gaugeData = [
-     
-    ];
-    
-    // 5. Create the layout for the gauge chart.
-    var gaugeLayout = { 
-     
-    };
+  //   // 5. Create the layout for the gauge chart.
+     var gaugeLayout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
 
-    // 6. Use Plotly to plot the gauge data and layout.
-    Plotly.newPlot();
+  //   // 6. Use Plotly to plot the gauge data and layout.
+    Plotly.newPlot("gauge", gaugeData, gaugeLayout);
   });
 }
 
